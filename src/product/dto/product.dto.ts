@@ -10,14 +10,14 @@ export class ProductDto {
     @IsString()
     link: string;
 
-    @ApiProperty({ example: 'ROUPA' })
-    @IsString()
-    @IsNotEmpty({
-        message: 'A categoria do produto é obrigatório',
-    })
-    category: string;
-
     @ApiProperty({ example: '3141414109' })
     @IsString()
+    image: string;
+}
+
+export class ProductResponse {
+    id: string;
+    price: string;
+    link: string;
     image: string;
 }

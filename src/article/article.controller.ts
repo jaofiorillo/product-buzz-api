@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { ArticleDto } from './dto/article.dto';
 
@@ -12,7 +12,10 @@ export class ArticleController {
     }
 
     @Get()
-    async getAll() {
-        return await this.articleService.findAll();
+    async getAll(
+        @Query('page') page: number = 1,
+        @Query('limit') limit: number = 10,
+    ) {
+        return await this.articleService.findAll(page, limit);
     }
 }

@@ -28,6 +28,9 @@ export class ArticleEntity {
     @Column('simple-array', { name: 'tag' })
     tag: string[];
 
+    @Column({ name: 'category', length: 100, nullable: false })
+    category: string;
+
     @ManyToOne(() => UserEntity, (users) => users.articles)
     fk_author: UserEntity;
 

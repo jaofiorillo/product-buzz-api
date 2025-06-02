@@ -35,8 +35,26 @@ export class ArticleDto {
     @IsString()
     tag: string[];
 
+    @ApiProperty({ example: 'ROUPA' })
+    @IsString()
+    @IsNotEmpty({
+        message: 'A categoria do produto é obrigatório',
+    })
+    category: string;
+
     @IsNotEmpty({
         message: 'the products is required',
     })
+    products: ProductDto[];
+}
+
+export class ArticleResponse {
+    id: string;
+    title: string;
+    slug: string;
+    description: string;
+    content: string;
+    category: string;
+    tag: string[];
     products: ProductDto[];
 }

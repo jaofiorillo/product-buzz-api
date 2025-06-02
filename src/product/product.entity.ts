@@ -12,9 +12,6 @@ export class ProductEntity {
     @Column({ name: 'link', length: 100 })
     link: string;
 
-    @Column({ name: 'category', length: 100, nullable: false })
-    category: string;
-
     @Column({ name: 'image', length: 500 })
     image: string;
 

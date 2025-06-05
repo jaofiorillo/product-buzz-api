@@ -35,13 +35,24 @@ export class ArticleDto {
     @IsString()
     tag: string[];
 
-    @ApiProperty({ example: 'ROUPA' })
+    @ApiProperty({ example: '1' })
     @IsString()
     @IsNotEmpty({
         message: 'A categoria do produto é obrigatório',
     })
-    category: string;
+    fk_category: string;
 
+    @ApiProperty({
+        type: ProductDto,
+        isArray: true,
+        example: [
+            {
+                price: '30',
+                link: 'http://33',
+                image: '1234',
+            },
+        ],
+    })
     @IsNotEmpty({
         message: 'the products is required',
     })

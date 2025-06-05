@@ -1,3 +1,4 @@
+import { CategoryEntity } from '../category/category.entity';
 import { ProductEntity } from '../product/product.entity';
 import { UserEntity } from '../user/user.entity';
 import {
@@ -28,8 +29,8 @@ export class ArticleEntity {
     @Column('simple-array', { name: 'tag' })
     tag: string[];
 
-    @Column({ name: 'category', length: 100, nullable: false })
-    category: string;
+    @ManyToOne(() => CategoryEntity, (category) => category.articles)
+    category: CategoryEntity;
 
     @ManyToOne(() => UserEntity, (users) => users.articles)
     fk_author: UserEntity;

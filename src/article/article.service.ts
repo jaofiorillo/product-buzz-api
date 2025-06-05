@@ -6,7 +6,8 @@ import { ArticleDto, ArticleResponse } from './dto/article.dto';
 import { ProductService } from 'src/product/product.service';
 import { ProductEntity } from 'src/product/product.entity';
 import { plainToInstance } from 'class-transformer';
-import { ProductDto, ProductResponse } from 'src/product/dto/product.dto';
+import { ProductResponse } from 'src/product/dto/product.dto';
+import { CategoryService } from 'src/category/category.service';
 
 @Injectable()
 export class ArticleService {
@@ -14,6 +15,7 @@ export class ArticleService {
         @InjectRepository(ArticleEntity)
         private readonly articleRepository: Repository<ArticleEntity>,
         private readonly productService: ProductService,
+        private readonly categoryService: CategoryService,
     ) {}
 
     async create(articleDto: ArticleDto) {
@@ -25,7 +27,12 @@ export class ArticleService {
         }
 
         let new_article = this.articleRepository.create(articleDto);
+        let category = await this.categoryService.findById(
+            articleDto.fk_category,
+        );
+
         new_article.products = save_products;
+        new_article.category = category;
         await this.articleRepository.save(new_article);
     }
 
@@ -33,6 +40,7 @@ export class ArticleService {
         const [articles, total] = await this.articleRepository
             .createQueryBuilder('article')
             .innerJoinAndSelect('article.products', 'product')
+            .innerJoinAndSelect('article.category', 'category')
             .skip((page - 1) * limit)
             .take(limit)
             .getManyAndCount();
@@ -45,11 +53,13 @@ export class ArticleService {
                     ProductResponse,
                     article.products,
                 );
+
                 let article_response = plainToInstance(
                     ArticleResponse,
                     article,
                 );
                 article_response.products = products_response;
+                article_response.category = article.category.name;
                 articles_response.push(article_response);
             }
         }

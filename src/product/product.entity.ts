@@ -1,5 +1,12 @@
 import { ArticleEntity } from '../article/article.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    ManyToOne,
+    CreateDateColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'product' })
 export class ProductEntity {
@@ -14,6 +21,12 @@ export class ProductEntity {
 
     @Column({ name: 'image', length: 500 })
     image: string;
+
+    @CreateDateColumn({ name: 'created_at' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ name: 'updated_at' })
+    updatedAt: Date;
 
     @ManyToOne(() => ArticleEntity, (article) => article.products)
     fk_article: ArticleEntity;

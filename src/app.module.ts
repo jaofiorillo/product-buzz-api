@@ -6,6 +6,7 @@ import { PostgresConfigService } from './config/db.config.service';
 import { ProductModule } from './product/product.module';
 import { ArticleModule } from './article/article.module';
 import { CategoryModule } from './category/category.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
@@ -13,6 +14,7 @@ import { CategoryModule } from './category/category.module';
         ProductModule,
         ArticleModule,
         CategoryModule,
+        AuthModule,
         ConfigModule.forRoot({
             isGlobal: true,
         }),

@@ -1,5 +1,12 @@
 import { ArticleEntity } from '../article/article.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    OneToMany,
+    CreateDateColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -14,6 +21,12 @@ export class UserEntity {
 
     @Column({ name: 'password', nullable: false })
     password: string;
+
+    @CreateDateColumn({ name: 'created_at' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ name: 'updated_at' })
+    updatedAt: Date;
 
     @OneToMany(() => ArticleEntity, (articles) => articles.fk_author)
     articles: ArticleEntity[];

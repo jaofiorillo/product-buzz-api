@@ -1,5 +1,13 @@
+import { Exclude } from 'class-transformer';
 import { ArticleEntity } from '../article/article.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'category' })
 export class CategoryEntity {
@@ -8,6 +16,12 @@ export class CategoryEntity {
 
     @Column({ name: 'name', length: 100, nullable: false })
     name: string;
+
+    @CreateDateColumn({ name: 'created_at' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ name: 'updated_at' })
+    updatedAt: Date;
 
     @OneToMany(() => ArticleEntity, (article) => article.category)
     articles: ArticleEntity[];

@@ -7,6 +7,8 @@ import {
     PrimaryGeneratedColumn,
     ManyToOne,
     OneToMany,
+    CreateDateColumn,
+    UpdateDateColumn,
 } from 'typeorm';
 
 @Entity({ name: 'article' })
@@ -28,6 +30,12 @@ export class ArticleEntity {
 
     @Column('simple-array', { name: 'tag' })
     tag: string[];
+
+    @CreateDateColumn({ name: 'created_at' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ name: 'updated_at' })
+    updatedAt: Date;
 
     @ManyToOne(() => CategoryEntity, (category) => category.articles)
     category: CategoryEntity;

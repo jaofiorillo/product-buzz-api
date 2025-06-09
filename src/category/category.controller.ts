@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CategoryService } from './category.service';
+import { Public } from 'src/decorators/decorators';
 
 @Controller('category')
 export class CategoryController {
@@ -11,11 +12,13 @@ export class CategoryController {
     }
 
     @Get()
+    @Public()
     async getAll() {
         return await this.categoryService.findAll();
     }
 
     @Get(':id')
+    @Public()
     async findById(@Param('id') id: string) {
         return await this.categoryService.findById(id);
     }

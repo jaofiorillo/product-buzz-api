@@ -4,7 +4,6 @@ import { ArticleEntity } from './article.entity';
 import { Repository } from 'typeorm';
 import { ArticleDto, ArticleResponse } from './dto/article.dto';
 import { ProductService } from 'src/product/product.service';
-import { ProductEntity } from 'src/product/product.entity';
 import { plainToInstance } from 'class-transformer';
 import { ProductResponse } from 'src/product/dto/product.dto';
 import { CategoryService } from 'src/category/category.service';
@@ -19,21 +18,21 @@ export class ArticleService {
     ) {}
 
     async create(articleDto: ArticleDto) {
-        const save_products: ProductEntity[] = [];
-
-        for (let products_dto of articleDto.products) {
-            const save_product = await this.productService.create(products_dto);
-            save_products.push(save_product);
-        }
-
-        let new_article = this.articleRepository.create(articleDto);
-        let category = await this.categoryService.findById(
+        const category = await this.categoryService.findById(
             articleDto.fk_category,
         );
 
-        new_article.products = save_products;
-        new_article.category = category;
-        await this.articleRepository.save(new_article);
+        const savedProducts = await Promise.all(
+            articleDto.products.map((productDto) =>
+                this.productService.create(productDto),
+            ),
+        );
+
+        const article = this.articleRepository.create(articleDto);
+        article.products = savedProducts;
+        article.category = category;
+
+        await this.articleRepository.save(article);
     }
 
     async findAll(page: number, limit: number) {
@@ -45,30 +44,38 @@ export class ArticleService {
             .take(limit)
             .getManyAndCount();
 
-        const articles_response: ArticleResponse[] = [];
-
-        if (articles.length > 0) {
-            for (let article of articles) {
-                let products_response = plainToInstance(
-                    ProductResponse,
-                    article.products,
-                );
-
-                let article_response = plainToInstance(
-                    ArticleResponse,
-                    article,
-                );
-                article_response.products = products_response;
-                article_response.category = article.category.name;
-                articles_response.push(article_response);
-            }
-        }
+        const items = articles.map((article) => {
+            const products = plainToInstance(ProductResponse, article.products);
+            const articleResponse = plainToInstance(ArticleResponse, article);
+            articleResponse.products = products;
+            articleResponse.category = article.category.name;
+            return articleResponse;
+        });
 
         return {
-            items: articles_response,
+            items,
             total,
             page,
             limit,
         };
+    }
+
+    async findById(id: string) {
+        const article = await this.articleRepository
+            .createQueryBuilder('article')
+            .innerJoinAndSelect('article.products', 'product')
+            .innerJoinAndSelect('article.category', 'category')
+            .where('article.id = :id', { id })
+            .getOneOrFail();
+
+        const products_response = article.products.map((product) =>
+            plainToInstance(ProductResponse, product),
+        );
+
+        const article_response = plainToInstance(ArticleResponse, article);
+        article_response.products = products_response;
+        article_response.category = article.category.name;
+
+        return article_response;
     }
 }

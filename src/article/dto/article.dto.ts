@@ -38,7 +38,7 @@ export class ArticleDto {
     @ApiProperty({ example: '1' })
     @IsString()
     @IsNotEmpty({
-        message: 'A categoria do produto é obrigatório',
+        message: 'the category field is required',
     })
     fk_category: string;
 

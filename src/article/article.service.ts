@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ArticleEntity } from './article.entity';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 import { ArticleDto, ArticleResponse } from './dto/article.dto';
 import { ProductService } from 'src/product/product.service';
 import { plainToInstance } from 'class-transformer';
 import { ProductResponse } from 'src/product/dto/product.dto';
 import { CategoryService } from 'src/category/category.service';
+import { ArticleFilters } from './dto/article.filters';
 
 @Injectable()
 export class ArticleService {
@@ -35,11 +36,14 @@ export class ArticleService {
         await this.articleRepository.save(article);
     }
 
-    async findAll(page: number, limit: number) {
-        const [articles, total] = await this.articleRepository
+    async findAll(page: number, limit: number, filters: ArticleFilters) {
+        const builder = await this.articleRepository
             .createQueryBuilder('article')
             .innerJoinAndSelect('article.products', 'product')
-            .innerJoinAndSelect('article.category', 'category')
+            .innerJoinAndSelect('article.category', 'category');
+
+        this.buildFilters(builder, filters);
+        const [articles, total] = await builder
             .skip((page - 1) * limit)
             .take(limit)
             .getManyAndCount();
@@ -58,6 +62,22 @@ export class ArticleService {
             page,
             limit,
         };
+    }
+
+    private buildFilters(
+        builder: SelectQueryBuilder<ArticleEntity>,
+        filters: ArticleFilters,
+    ) {
+        if (filters.title != null) {
+            builder.where('article.title ILIKE :title', {
+                title: `%${filters.title}%`,
+            });
+        }
+        if (filters.category != null) {
+            builder.andWhere('article.category = :category', {
+                category: filters.category,
+            });
+        }
     }
 
     async findById(id: string) {

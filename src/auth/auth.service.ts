@@ -19,7 +19,7 @@ export class AuthService {
         const user = await this.userService.findOneByEmail(email);
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            throw new UnauthorizedException('Credenciais incorretas');
+            throw new UnauthorizedException('Incorrect credentials');
         }
 
         const payload = { sub: user.id, username: user.name };
@@ -31,7 +31,7 @@ export class AuthService {
     async getAuthenticatedUser(request: Request) {
         const token = this.extractTokenFromHeader(request);
         if (!token) {
-            throw new UnauthorizedException('Token não fornecido');
+            throw new UnauthorizedException('Token not provided');
         }
 
         const payload = await this.jwtService.verifyAsync(token, {
@@ -40,7 +40,7 @@ export class AuthService {
 
         const user = await this.userService.findOneById(payload.sub);
         if (!user) {
-            throw new UnauthorizedException('Usuário não encontrado');
+            throw new UnauthorizedException('User not found');
         }
 
         return user;

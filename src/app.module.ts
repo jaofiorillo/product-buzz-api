@@ -7,6 +7,7 @@ import { ProductModule } from './product/product.module';
 import { ArticleModule } from './article/article.module';
 import { CategoryModule } from './category/category.module';
 import { AuthModule } from './auth/auth.module';
+import { EmailModule } from './emails/email.module';
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
         ArticleModule,
         CategoryModule,
         AuthModule,
+        EmailModule,
         ConfigModule.forRoot({
             isGlobal: true,
         }),

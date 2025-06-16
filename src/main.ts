@@ -1,8 +1,9 @@
-import { SetMetadata, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import * as dotenv from 'dotenv';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -16,7 +17,8 @@ async function bootstrap() {
 
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
     app.useLogger(['log', 'error', 'warn', 'debug', 'verbose']);
-    app.enableCors();
+
+    dotenv.config();
 
     const config = new DocumentBuilder()
         .setTitle('Product buzz')

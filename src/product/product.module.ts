@@ -7,15 +7,13 @@ import { ArticleService } from 'src/article/article.service';
 import { ArticleEntity } from 'src/article/article.entity';
 import { CategoryEntity } from 'src/category/category.entity';
 import { CategoryModule } from 'src/category/category.module';
+import { EmailModule } from 'src/emails/email.module';
 
 @Module({
     imports: [
         CategoryModule,
-        TypeOrmModule.forFeature([
-            ProductEntity,
-            ArticleEntity,
-            CategoryModule,
-        ]),
+        EmailModule,
+        TypeOrmModule.forFeature([ProductEntity, ArticleEntity]),
     ],
     controllers: [ProductController],
     providers: [ProductService, ArticleService],

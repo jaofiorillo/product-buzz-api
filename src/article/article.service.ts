@@ -8,6 +8,7 @@ import { plainToInstance } from 'class-transformer';
 import { ProductResponse } from 'src/product/dto/product.dto';
 import { CategoryService } from 'src/category/category.service';
 import { ArticleFilters } from './dto/article.filters';
+import { EmailService } from 'src/emails/email.service';
 
 @Injectable()
 export class ArticleService {
@@ -16,6 +17,7 @@ export class ArticleService {
         private readonly articleRepository: Repository<ArticleEntity>,
         private readonly productService: ProductService,
         private readonly categoryService: CategoryService,
+        private readonly emailService: EmailService,
     ) {}
 
     async create(articleDto: ArticleDto) {
@@ -33,7 +35,13 @@ export class ArticleService {
         article.products = savedProducts;
         article.category = category;
 
-        await this.articleRepository.save(article);
+        const new_article = await this.articleRepository.save(article);
+
+        this.emailService.sendEmail('New Project!', {
+            title: 'New Project!',
+            articleName: new_article.title,
+            url: 'google.com',
+        });
     }
 
     async findAll(page: number, limit: number, filters: ArticleFilters) {

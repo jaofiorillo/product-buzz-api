@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 import { ProductDto } from 'src/product/dto/product.dto';
 
 export class ArticleDto {
@@ -32,7 +32,7 @@ export class ArticleDto {
     content: string;
 
     @ApiProperty({ example: 'technology' })
-    @IsString()
+    @IsArray()
     tag: string[];
 
     @ApiProperty({ example: '1' })

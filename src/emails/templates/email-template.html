@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>New Blog Post Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            max-width: 600px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        .content {
+            font-size: 16px;
+            color: #555555;
+            line-height: 1.6;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #aaaaaa;
+            text-align: center;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #4caf50;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">{{title}}</div>
+
+        <div class="content">
+            <p>Hey there!</p>
+            <p>We've just published a new blog post: <strong>{{articleName}}</strong>.</p>
+            <p>Click below to check it out:</p>
+
+            <a href="{{url}}" class="button">Read Now</a>
+        </div>
+
+        <div class="footer">
+            You are receiving this email because you subscribed to our blog updates.
+        </div>
+    </div>
+</body>
+
+</html>

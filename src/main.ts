@@ -19,6 +19,7 @@ async function bootstrap() {
     app.useLogger(['log', 'error', 'warn', 'debug', 'verbose']);
 
     dotenv.config();
+    app.enableCors();
 
     const config = new DocumentBuilder()
         .setTitle('Product buzz')
